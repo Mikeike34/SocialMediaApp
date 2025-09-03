@@ -1,0 +1,22 @@
+#Node Dependencies
+node_modules/
+
+#Environment Variables
+.env
+
+#Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+#os generate files
+.DS_Store
+Thumbs.db 
+
+#IDE/editor settings
+.vscode/
+.idea/
+
+#Database dumps
+*.sql
+dump/
