@@ -34,11 +34,20 @@ router.post('/', authenticateToken, async (req , res) => {
     }
 });
 
+
 //get all posts (most recent first) Includes like/comment counts
-router.get('/user/:authorId', async (req, res) => {
+router.get('/', async (req, res) => {
     try{
+        //Pagination query params
+        const page = parseInt(req.query.page) || 1; //default to page 1
+        const limit = parseInt(req.query.limit) || 10 //default 10 posts per page
+        const skip = (page - 1) * limit;
+
         //fetch posts sorted by newest
-        const posts = await Post.find().sort({createdAt: -1});
+        const posts = await Post.find()
+            .sort({createdAt: -1})
+            .skip(skip)
+            .limit(limit);
         
         //Map each post to include likes and comments counts
         const postWithDetails = await Promise.all(posts.map(async (post) => {
@@ -55,15 +64,26 @@ router.get('/user/:authorId', async (req, res) => {
             return{
                 ...post.toObject(),
                 likesCount,
-                commentsCount
-            }
+                commentsCount,
+                author
+            };
         }));
 
-        res.json(postWithDetails);
+        //Total count of posts
+        const totalPosts = await Post.countDocuments();
+
+        res.json({
+            page,
+            limit,
+            totalPosts,
+            totalPages: Math.ceil(totalPosts/limit),
+            posts: postWithDetails
+        });
     }catch(err){
         res.status(500).json({error: err.message });
     }
 });
+
 
 //Edit a post
 router.put('/:postId', authenticateToken, async (req, res ) => {
