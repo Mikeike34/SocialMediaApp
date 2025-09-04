@@ -1,12 +1,13 @@
 const express = require('express');
     const router = express.Router();
     const Like = require('../models/Like');
+    const authenticateToken = require('../middleware/auth');
 
     //like a post
-    router.post('/:postId', async (req , res )=> {
+    router.post('/:postId',authenticateToken, async (req , res )=> {
         try{
-            const {postId} = req.params;
-            const { userId} = req.body;
+            const postId = req.params.postId;
+            const userId = req.user.id;
 
             //prevent duplicate likes by same user
             const existingLike = await Like.findOne({postId, userId});

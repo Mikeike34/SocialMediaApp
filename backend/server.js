@@ -21,11 +21,13 @@ pgPool.query('SELECT NOW()', (err, res) => {
 const postRoutes = require('./routes/posts');
 const commentRoutes = require('./routes/comments');
 const likeRoutes = require('./routes/likes');
+const userRoutes = require('./routes/users');
 
 //Mount routes
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/likes', likeRoutes);
+app.use('/api/users', userRoutes);
 
 //default route
 app.get('/', (req, res) => res.send('Social Media API running'));
