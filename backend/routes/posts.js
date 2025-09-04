@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/post');
+const Comment = require('../models/Comment');
+const Like = require('../models/Like');
 const pgPool = require('../databases/postgres'); //postgreSQL connection
 const authenticateToken = require('../middleware/auth');
 
@@ -91,10 +93,14 @@ router.delete('/:postId', authenticateToken, async (req, res ) => {
             return res.status(403).json({error: 'You can only delete your own posts! '});
         }
 
+        //Delete associated likes and comments
+        await Like.deleteMany({ postId });
+        await Comment.deleteMany({ postId });
+
         //delete the post
         await post.deleteOne();
 
-        res.json({message: 'Post deleted successfully'});
+        res.json({message: 'Post deleted successfully along with likes and comments'});
     }catch(err){
         res.status(500).json({error: err.message });
     }
