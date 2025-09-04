@@ -34,11 +34,32 @@ router.post('/', authenticateToken, async (req , res) => {
     }
 });
 
-//get all posts (most recent first)
+//get all posts (most recent first) Includes like/comment counts
 router.get('/user/:authorId', async (req, res) => {
     try{
+        //fetch posts sorted by newest
         const posts = await Post.find().sort({createdAt: -1});
-        res.json(posts);
+        
+        //Map each post to include likes and comments counts
+        const postWithDetails = await Promise.all(posts.map(async (post) => {
+            //like and comment counts
+            const likesCount = await Like.countDocuments({ postId: post._id });
+            const commentsCount = await Comment.countDocuments({ postId: post._id });
+
+            //author info
+            const result = await pgPool.query(
+                `SELECT id, username, profile_pic FROM users WHERE id = $1`,
+                [post.authorId]
+            );
+            const author = result.rows[0] || {id: post.authorId, username: 'unknown', profile_pic: null };
+            return{
+                ...post.toObject(),
+                likesCount,
+                commentsCount
+            }
+        }));
+
+        res.json(postWithDetails);
     }catch(err){
         res.status(500).json({error: err.message });
     }
