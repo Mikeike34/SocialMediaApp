@@ -85,6 +85,50 @@ router.get('/', async (req, res) => {
 });
 
 
+//get posts by a specific user
+router.get('/user/:userId', async (req, res ) => {
+    try{
+        const { userId } = req.params;
+
+        //pagination for profile posts
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        //fetch posts for the user, newest first
+        const posts = await Post.find({authorId: userId })
+            .sort({createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        //add likes and comments count for each post
+        const postsWithDetails = await Promise.all(posts.map(async (post) => {
+            const likesCount = await Like.countDocuments({ postId: post._id });
+            const commentsCount = await Comment.countDocuments({ postId: post._id });
+
+            return {
+                ...post.toObject(),
+                likesCount,
+                commentsCount
+            };
+        }));
+
+        //Total posts count
+        const totalPosts = await Post.countDocuments({ authorId: userId });
+
+        res.json({
+            page,
+            limit,
+            totalPosts,
+            totalPages: Math.ceil(totalPosts / limit),
+            posts: postsWithDetails
+        });
+    }catch(err){
+        res.status(500).json({error: err.message});
+    }
+});
+
+
 //Edit a post
 router.put('/:postId', authenticateToken, async (req, res ) => {
     try{
