@@ -22,12 +22,16 @@ const postRoutes = require('./routes/posts');
 const commentRoutes = require('./routes/comments');
 const likeRoutes = require('./routes/likes');
 const userRoutes = require('./routes/users');
+const followerRoutes = require('./routes/followers');
+const feedRoutes = require('./routes/feed');
 
 //Mount routes
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/likes', likeRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/follow', followerRoutes);
+app.use('/api/feed', feedRoutes);
 
 //default route
 app.get('/', (req, res) => res.send('Social Media API running'));
