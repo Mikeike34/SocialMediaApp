@@ -58,4 +58,6 @@ async function getFollowingIds(userId){
     return result.rows.map(r => r.following_id);
 }
 
+
+
 module.exports = {followUser, unfollowUser, getFollowing, getFollowers, getFollowingIds};

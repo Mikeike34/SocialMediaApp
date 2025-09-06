@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const { createUser, getUserByEmail, getUserById } = require('../models/postgresUser');
+const { createUser, getUserByEmail, getUserById, getFollowingCount, getFollowerCount } = require('../models/postgresUser');
+const { getFollowers, getFollowing} = require('../models/postgresFollowers');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
@@ -46,15 +47,49 @@ router.post('/login', async (req , res) => {
     }
 });
 
-//Get a user profile
+//Get a user profile with follower/following counts
 router.get('/:id', async (req , res) => {
     try {
         const user = await getUserById(req.params.id);
         if(!user) return res.status(404).json({error: 'User not found'});
 
-        res.json(user)
+        const followerCount = await getFollowerCount(req.params.id);
+        const followingCount = await getFollowingCount(req.params.id);
+
+        res.json({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+            profile_pic: user.profile_pic,
+            created_at: user.created_at,
+            followerCount,
+            followingCount
+        });
     }catch(err){
         res.status(500).json({error: err.message });
+    }
+});
+
+
+//Get user follower count
+router.get('/followers/:id/count', async (req , res) => {
+    try{
+        const count = await getFollowerCount(req.params.id);
+        res.json({followerCount: count});
+    }catch(err){
+        res.status(500).json({error:err.message});
+    }
+});
+
+
+//Get user's following count
+router.get('/following/:id/count', async (req , res) => {
+    try{
+        const count = await getFollowingCount(req.params.id);
+        res.json({followingCount: count});
+    }catch(err){
+        res.status(500).json({error:err.message});
     }
 });
 

@@ -26,8 +26,28 @@ async function getUserById(id){
     return result.rows[0];
 }
 
+//Get user follower count
+async function getFollowerCount(userId){
+    const result = await pool.query(
+        `SELECT COUNT(*) FROM followers WHERE following_id = $1`,
+        [userId]
+    );
+    return parseInt(result.rows[0].count, 10);
+}
+
+//Get user following count
+async function getFollowingCount(userId){
+    const result = await pool.query(
+        `SELECT COUNT(*) FROM followers WHERE follower_id = $1`,
+        [userId]
+    );
+    return parseInt(result.rows[0].count, 10);
+}
+
 module.exports = {
     createUser,
     getUserByEmail,
-    getUserById
+    getUserById,
+    getFollowerCount,
+    getFollowingCount
 };
