@@ -16,7 +16,7 @@ const UserProfile = () => {
             borderRadius={'30px'}
           >
            <VStack divideY={'2px'} flexDir={'column'} h = '95vh' w = '100%' align = 'stretch'>
-            <Flex h = '10vh' ml = {5} >
+            <Flex h = '10vh' justify = 'center' align = 'center' >
               <Avatar.Root>
                 <Avatar.Fallback name = 'Test' />
                 <Avatar.Image />
