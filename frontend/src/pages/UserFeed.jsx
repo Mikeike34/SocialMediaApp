@@ -13,7 +13,7 @@ const UserFeed = () => {
             flex={'1'}
             mt = {5}
             bgColor = 'white'
-            borderRadius={'30px'}
+            borderRadius={'10px'}
           >
             <VStack divideY={'2px'} flexDir={'column'} h = '95vh' w = '100%' align = 'stretch'>
             <Flex h = '10vh' justify = 'center' align = 'center' >

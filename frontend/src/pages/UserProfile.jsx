@@ -1,3 +1,4 @@
+import PostCard from '@/components/PostCard'
 import Sidebar from '@/components/Sidebar'
 import { Avatar, Flex, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
@@ -13,7 +14,7 @@ const UserProfile = () => {
             flex={'1'}
             mt = {5}
             bgColor = 'white'
-            borderRadius={'30px'}
+            borderRadius={'10px'}
           >
            <VStack divideY={'2px'} flexDir={'column'} h = '95vh' w = '100%' align = 'stretch'>
             <Flex h = '10vh' justify = 'center' align = 'center' >
@@ -25,10 +26,9 @@ const UserProfile = () => {
                 <Heading as = 'h2' color = 'black'>Username</Heading>
                 <Text color = 'gray'>Test</Text>
               </Flex>
-                
             </Flex>
-            <Flex >
-              <Text mt = {10}>User Posts</Text>
+            <Flex justify = 'center' pt = '5'>
+              <PostCard active/>
             </Flex>
 
            </VStack>
