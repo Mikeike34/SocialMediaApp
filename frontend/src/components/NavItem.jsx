@@ -5,7 +5,7 @@ import React from 'react'
 
 const NavItem = ({navSize, title, icon, active }) => {
   const navigate = useNavigate();
-  const routes = {
+  const routes = {  //routes to guide button where to navigate user
     Dashboard: '/feed',
     Profile: '/profile'
   };

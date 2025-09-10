@@ -1,11 +1,13 @@
 import Sidebar from '@/components/Sidebar';
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex, HStack, Text } from '@chakra-ui/react'
 import React from 'react'
 
 const UserFeed = () => {
   return (
-    <Flex minH = '100vh' align = 'center' bgColor = 'gray.600'>
-        <Sidebar />
+    <Flex minH = '100vh' bgColor = 'gray.600'>
+        <HStack>
+          <Sidebar />
+        </HStack>
     </Flex>
   )
 }
