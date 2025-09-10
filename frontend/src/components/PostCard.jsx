@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 const PostCard = () => {
     const [liked, setLiked] = useState(false)
   return (
-    <Card.Root minh = '20vh' w = '60%' justify = 'center' bgColor = 'yellow.300' border = 'transparent' shadow={'sm'} borderRadius = '10px'> 
+    <Card.Root minh = '20vh' w = '60%' justify = 'center' bgColor = 'gray.200' border = 'transparent' shadow={'sm'} borderRadius = '10px'> 
         <Card.Body gap = '2'>
             <HStack>
                 <Avatar.Root>
