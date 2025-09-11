@@ -137,6 +137,74 @@ router.get('/user/:userId', async (req, res ) => {
 });
 
 
+//Get all posts from users that the current user follows
+router.get('/following', authenticateToken, async (req , res) => {
+    try{
+        const userId = req.user.id;
+
+        //pagination
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        //get all followed user IDs from postgreSQL
+        const followResult = await pgPool.query(
+            `SELECT following_id FROM followers WHERE follower_id = $1`,
+            [userId]
+        );
+        const followedIds = followResult.rows.map(row => String(row.following_id));
+
+        if(followedIds.length === 0){
+            return res.json({
+                page,
+                limit,
+                totalPosts: 0,
+                totalPages: 0,
+                posts: []
+            });
+        }
+
+        //fetch posts authored by followed users
+        const posts = await Post.find({authorId: { $in: followedIds } })
+            .sort({createdAt: -1})
+            .skip(skip)
+            .limit(limit);
+
+        //map details (likes, comments, author info)
+        const postsWithDetails = await Promise.all(posts.map(async (post) => {
+            const likesCount = await Like.countDocuments({postId: post._id });
+            const commentsCount = await Comment.countDocuments({ postId: post._id});
+
+            const result = await pgPool.query(
+                `SELECT id, username, profile_pic FROM users WHERE id = $1`,
+                [post.authorId]
+            );
+            const author = result.rows[0] || {id: post.authorId, username: 'unknown', profile_pic: null};
+
+            return {
+                ...post.toObject(),
+                likesCount,
+                commentsCount,
+                author
+            };
+        }));
+
+        //total Count of followed users' posts
+        const totalPosts = await Post.countDocuments({authorId: {$in: followedIds}});
+
+        res.json({
+            page,
+            limit,
+            totalPosts,
+            totalPages: Math.ceil(totalPosts / limit),
+            posts: postsWithDetails
+        });
+    }catch(err){
+        res.status(500).json({error: err.message});
+    }
+});
+
+
 //Edit a post
 router.put('/:postId', authenticateToken, async (req, res ) => {
     try{
