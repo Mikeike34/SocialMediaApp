@@ -5,6 +5,38 @@ import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    //Handle Form Submission
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        try{
+            const res = await fetch('http://localhost:5000/api/users/login' , {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({email, password}),
+            });
+
+            const data = await res.json();
+            if(!res.ok){
+                setError(data.error || 'Login Failed');
+                return;
+            }
+
+            //Save token in localStorage
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userID', data.user.id);
+
+            //redirect to feed
+            navigate('/feed');
+        }catch(err){
+            setError('Network Error');
+        }
+    };
 
     
   return (
@@ -13,7 +45,7 @@ const LoginPage = () => {
             <Text fontSize ='2xl' fontWeight ='bold' mb={6} color = {'black'}>
                 Login
             </Text>
-            <form >
+            <form onSubmit = {handleLogin}>
                 <VStack spacing = {4}>
                     <Field.Root required>
                         <Field.Label color = {'black'}>
@@ -23,6 +55,9 @@ const LoginPage = () => {
                         <Input 
                             type = "text"
                             placeholder ="Enter your email"
+                            value = {email}
+                            onChange = {(e) => setEmail(e.target.value)}
+                            color = 'black'
                         />
                     </Field.Root>
                     <Field.Root required>
@@ -33,6 +68,9 @@ const LoginPage = () => {
                         <Input 
                             type = "password"
                             placeholder = "Enter your password"
+                            value = {password}
+                            onChange = {(e) => setPassword(e.target.value)}
+                            color = 'black'
                         />
                     </Field.Root>
                     <Button

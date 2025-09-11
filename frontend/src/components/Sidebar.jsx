@@ -5,13 +5,45 @@ import { FiMessageCircle } from "react-icons/fi";
 import { FiSettings } from "react-icons/fi";
 import { IoPersonOutline } from "react-icons/io5";
 import { IoNotificationsOutline } from "react-icons/io5";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import NavItem from './NavItem';
 
 const Sidebar = () => {
-    const [navSize, changeNavSize] = useState('small')
+    const [navSize, changeNavSize] = useState('small');
     const location = useLocation();
+
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const userID = localStorage.getItem('userID');
+    const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        if(!userID || !token) return;
+
+        const fetchUser = async () => {
+            try{
+                const res = await fetch(`http://localhost:5000/api/users/${userID}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    setUser(data);
+                }else{
+                    console.error('Failed to fetch user:', data.error);                }
+            }catch(err){
+                console.error('Network Error:', err);
+            }finally {
+                setLoading(false);
+            }
+        };
+        fetchUser();
+    }, [userID, token]);
     
     return (
         <Flex
@@ -58,12 +90,12 @@ const Sidebar = () => {
             </Flex>
             <Flex mt = {4} p = '5%' flexDir = 'row' w = '100%' justifyContent={navSize == 'small' ? 'center': 'flex-start'} mb = {4}>
                 <Avatar.Root>
-                    <Avatar.Fallback name = 'Test' />
+                    <Avatar.Fallback name = {user?.username} />
                     <Avatar.Image />
                 </Avatar.Root>
                 <Flex flexDir = 'column' ml = {2} display={navSize == 'small' ? 'none' : 'flex'}>
-                    <Heading as = 'h3' size = 'sm' color = 'black'>Username</Heading>
-                    <Text color = 'gray'>Test</Text>
+                    <Heading as = 'h3' size = 'sm' color = 'black'>{user?.username}</Heading>
+                    <Text color = 'gray' fontSize = 'xs' wordBreak={'break-word'}>{user?.email}</Text>
                 </Flex>
             </Flex>
         </Flex>

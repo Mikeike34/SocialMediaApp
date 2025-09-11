@@ -106,10 +106,18 @@ router.get('/user/:userId', async (req, res ) => {
             const likesCount = await Like.countDocuments({ postId: post._id });
             const commentsCount = await Comment.countDocuments({ postId: post._id });
 
+            //fetch author infor from PostgreSQL
+            const result = await pgPool.query(
+                `SELECT id, username, profile_pic FROM users WHERE id = $1`,
+                [post.authorId]
+            );
+            const author = result.rows[0] || {id: post.authorId, username: 'unknown', profile_pic: null};
+
             return {
                 ...post.toObject(),
                 likesCount,
-                commentsCount
+                commentsCount,
+                author
             };
         }));
 

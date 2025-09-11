@@ -4,6 +4,35 @@ import { useNavigate } from 'react-router-dom';
 
 const SignupPage = () => {
         const navigate = useNavigate();
+        const [username, setUsername] = useState('');
+        const [email, setEmail] = useState('');
+        const [password, setPassword] = useState('');
+        const [error, setError] = useState('');
+
+        //handle for submission
+        const handleSignup = async (e) => {
+            e.preventDefault();
+            setError('');
+
+            try{
+                const res = await fetch('http://localhost:5000/users/signup', {
+                    method: 'POST',
+                    headers: { 'Constent-Type': 'application/json' },
+                    body: JSON.stringify({username, email, password}),
+                });
+
+                const data = await res.json();
+
+                if(!res.ok){
+                    setError(data.error || 'Signup Failed');
+                    return;
+                }
+
+                navigate('/');
+            }catch(err){
+                setError('Network Error');
+            }
+        };
 
         
   return (
@@ -12,7 +41,7 @@ const SignupPage = () => {
             <Text fontSize ='2xl' fontWeight ='bold' mb={6} color = {'black'}>
                 Register
             </Text>
-            <form>
+            <form onSubmit={handleSignup}>
                 <VStack spacing = {4}>
                     <Field.Root required>
                         <Field.Label color ={'black'}>
@@ -22,6 +51,8 @@ const SignupPage = () => {
                         <Input 
                             type = 'text'
                             placeholder = "Create a username"
+                            value = {username}
+                            onChange={(e) => setUsername(e.target.value)}
                         />
                     </Field.Root>
                     <Field.Root required>
@@ -32,6 +63,8 @@ const SignupPage = () => {
                         <Input 
                             type = "text"
                             placeholder ="Enter your email"
+                            value = {email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </Field.Root>
                     <Field.Root required>
@@ -42,6 +75,8 @@ const SignupPage = () => {
                         <Input 
                             type = "password"
                             placeholder = "Create a password"
+                            value = {password}
+                            onChange = {(e) => setPassword(e.target.value)}
                         />
                     </Field.Root>
                     <Button
