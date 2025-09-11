@@ -85,11 +85,8 @@ const Sidebar = () => {
                     <FiMenu />
                 </IconButton>
                 <NavItem navSize = {navSize} icon = {FiHome} title = "Dashboard" active={location.pathname == '/feed'} />
-                <NavItem navSize = {navSize} icon = {IoNotificationsOutline} title = 'Notifications' />
-                <NavItem navSize = {navSize} icon = {FiMessageCircle} title = 'Messages' />
                 <NavItem navSize = {navSize} icon = {MdOutlineAddBox} title = 'Share' active = {location.pathname == '/create'} />
                 <NavItem navSize = {navSize} icon = {IoPersonOutline} title = 'Profile' active={location.pathname == '/profile'} />
-                <NavItem navSize = {navSize} icon = {FiSettings} title = 'Settings' />
                 <NavItem navSize = {navSize} icon = {CgLogOut} title = 'Logout' />
             </Flex>
             <Flex mt = {4} p = '5%' flexDir = 'row' w = '100%' justifyContent={navSize == 'small' ? 'center': 'flex-start'} mb = {4}>
