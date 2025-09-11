@@ -5,6 +5,7 @@ import { FiMessageCircle } from "react-icons/fi";
 import { FiSettings } from "react-icons/fi";
 import { IoPersonOutline } from "react-icons/io5";
 import { IoNotificationsOutline } from "react-icons/io5";
+import { CgLogOut } from "react-icons/cg";
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import NavItem from './NavItem';
@@ -87,6 +88,7 @@ const Sidebar = () => {
                 <NavItem navSize = {navSize} icon = {FiMessageCircle} title = 'Messages' />
                 <NavItem navSize = {navSize} icon = {IoPersonOutline} title = 'Profile' active={location.pathname == '/profile'} />
                 <NavItem navSize = {navSize} icon = {FiSettings} title = 'Settings' />
+                <NavItem navSize = {navSize} icon = {CgLogOut} title = 'Logout' />
             </Flex>
             <Flex mt = {4} p = '5%' flexDir = 'row' w = '100%' justifyContent={navSize == 'small' ? 'center': 'flex-start'} mb = {4}>
                 <Avatar.Root>

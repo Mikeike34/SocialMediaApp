@@ -9,6 +9,25 @@ const NavItem = ({navSize, title, icon, active }) => {
     Dashboard: '/feed',
     Profile: '/profile'
   };
+
+  //Logout functionality
+  const handleClick = () => {
+    if(title === 'Logout'){
+      //clear auth data
+      localStorage.removeItem("token");
+      localStorage.removeItem('UserID');
+
+      //navigate to login page
+      navigate('/');
+      return;
+    }
+
+    //Default navigation
+    if(routes[title]){
+      navigate(routes[title]);
+    }
+  };
+
   return (
     <Flex
         mt = {30}
@@ -23,7 +42,7 @@ const NavItem = ({navSize, title, icon, active }) => {
                     borderRadius = {8}
                     _hover = {{textDecor: 'none', backgroundColor: '#AEC8CA'}}
                     w = {navSize == 'large' && '100%'}
-                    onClick = {() => navigate(routes[title])}
+                    onClick = {handleClick}
                 >
                     <Icon as = {icon} fontSize = 'xl' color ={active ? '#47967d' : 'gray.500'} />
                     <Text display={navSize == 'small' ? 'none' : 'Text'}>{title}</Text>
