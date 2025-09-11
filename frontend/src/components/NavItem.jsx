@@ -7,7 +7,8 @@ const NavItem = ({navSize, title, icon, active }) => {
   const navigate = useNavigate();
   const routes = {  //routes to guide button where to navigate user
     Dashboard: '/feed',
-    Profile: '/profile'
+    Profile: '/profile',
+    Share: '/create'
   };
 
   //Logout functionality

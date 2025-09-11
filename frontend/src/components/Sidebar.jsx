@@ -6,6 +6,7 @@ import { FiSettings } from "react-icons/fi";
 import { IoPersonOutline } from "react-icons/io5";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { CgLogOut } from "react-icons/cg";
+import { MdOutlineAddBox } from "react-icons/md";
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import NavItem from './NavItem';
@@ -86,6 +87,7 @@ const Sidebar = () => {
                 <NavItem navSize = {navSize} icon = {FiHome} title = "Dashboard" active={location.pathname == '/feed'} />
                 <NavItem navSize = {navSize} icon = {IoNotificationsOutline} title = 'Notifications' />
                 <NavItem navSize = {navSize} icon = {FiMessageCircle} title = 'Messages' />
+                <NavItem navSize = {navSize} icon = {MdOutlineAddBox} title = 'Share' active = {location.pathname == '/create'} />
                 <NavItem navSize = {navSize} icon = {IoPersonOutline} title = 'Profile' active={location.pathname == '/profile'} />
                 <NavItem navSize = {navSize} icon = {FiSettings} title = 'Settings' />
                 <NavItem navSize = {navSize} icon = {CgLogOut} title = 'Logout' />
