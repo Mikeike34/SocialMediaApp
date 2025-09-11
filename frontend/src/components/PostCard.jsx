@@ -12,7 +12,7 @@ const PostCard = ({ post }) => {
     useEffect(() => {
         const fetchLikedStatus = async () => {
             try{
-                const res = await fetch(`http://localhost:5000/api/likes/${post._id}`, {
+                const res = await fetch(`http://localhost:5000/api/likes/${post._id}/status`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -84,7 +84,7 @@ const PostCard = ({ post }) => {
                     background = 'transparent'
                 >
                     <Icon as = {liked ? FcLike : GoHeart} />
-                    {post.likesCount}
+                    {likeCount}
                 </Button>
                 <Button background = 'none' _hover = {{background: 'white'}} size = 'xs'>
                     View Comments
