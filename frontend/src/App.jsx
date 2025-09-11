@@ -5,6 +5,7 @@ import SignupPage from "./pages/SignupPage";
 import UserFeed from "./pages/UserFeed";
 import UserProfile from "./pages/UserProfile";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CreatePost from "./pages/CreatePost";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path ='/feed' element = {<UserFeed />} />
           <Route path = '/profile' element = {<UserProfile />} />
+          <Route path = '/create' element = {<CreatePost />} />
         </Route>
       </Routes>
     </Box>
