@@ -15,9 +15,9 @@ const SignupPage = () => {
             setError('');
 
             try{
-                const res = await fetch('http://localhost:5000/users/signup', {
+                const res = await fetch('http://localhost:5000/api/users/signup', {
                     method: 'POST',
-                    headers: { 'Constent-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({username, email, password}),
                 });
 
@@ -53,6 +53,7 @@ const SignupPage = () => {
                             placeholder = "Create a username"
                             value = {username}
                             onChange={(e) => setUsername(e.target.value)}
+                            color = 'black'
                         />
                     </Field.Root>
                     <Field.Root required>
@@ -65,6 +66,7 @@ const SignupPage = () => {
                             placeholder ="Enter your email"
                             value = {email}
                             onChange={(e) => setEmail(e.target.value)}
+                            color = 'black'
                         />
                     </Field.Root>
                     <Field.Root required>
@@ -77,6 +79,7 @@ const SignupPage = () => {
                             placeholder = "Create a password"
                             value = {password}
                             onChange = {(e) => setPassword(e.target.value)}
+                            color = 'black'
                         />
                     </Field.Root>
                     <Button
