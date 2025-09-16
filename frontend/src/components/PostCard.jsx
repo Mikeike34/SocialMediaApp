@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Flex, HStack, Icon, IconButton } from '@chakra-ui/react'
+import { Avatar, Box, Button, Card, Flex, HStack, Icon, IconButton, Input, Spinner, Text, VStack } from '@chakra-ui/react'
 import { GoHeart } from "react-icons/go";
 import { FcLike } from "react-icons/fc";
 import React, { useEffect, useState } from 'react'
@@ -6,8 +6,19 @@ import React, { useEffect, useState } from 'react'
 const PostCard = ({ post }) => {
     const userID = localStorage.getItem('userID');
     const token = localStorage.getItem('token');
+
+    //Like states
     const [liked, setLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(post.likesCount);
+
+
+    //comment states
+    const  [showComments, setShowComments] = useState(false);
+    const [comments, setComments] = useState([]);
+    const [loadingComments, setLoadingComments] = useState(false);
+    const [newComment, setNewComment] = useState('');
+
+    
 
     useEffect(() => {
         const fetchLikedStatus = async () => {
@@ -61,7 +72,62 @@ const PostCard = ({ post }) => {
         } catch(err){
             console.error('Network Error:', err);
         }
-    }
+    };
+
+    //fetchComments
+    const fetchComments = async () => {
+        setLoadingComments(true);
+        try{
+            const res = await fetch(`http://localhost:5000/api/comments/${post._id}`);
+            const data = await res.json();
+            if(res.ok){
+                setComments(data);
+            }
+        }catch(err){
+            console.error('Failed to load comments:', err);
+        }finally{
+            setLoadingComments(false);
+        }
+    };
+
+    //toggle comments 
+    const toggleComments = () => {
+        if(!showComments && comments.length === 0){
+            fetchComments();
+        }
+        setShowComments(!showComments);
+    };
+
+    //add a new comment
+    const handleAddComment = async () => {
+        if(!newComment.trim()) return;
+
+        try{
+            const res = await fetch(
+                `http://localhost:5000/api/comments/${post._id}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({text: newComment }),
+                }
+            );
+
+            if(res.ok){
+                const savedComment = await res.json();
+
+                setComments([
+                    ...comments,
+                    {...savedComment, username: 'You'}, //backend returns authorId only
+                ]);
+                setNewComment('');
+            }
+        }catch(err){
+            console.error('Error posting comment:', err);
+        }
+    };
     
   return (
     <Card.Root minh = '20vh' w = '60%' justify = 'center' bgColor = 'gray.200' border = 'transparent' shadow={'sm'} borderRadius = '10px'> 
@@ -77,6 +143,7 @@ const PostCard = ({ post }) => {
                 {post.text}
             </Card.Description>
         </Card.Body>
+
         <Card.Footer p ={2}>
             <Flex w ='100%' justify = 'space-between' align = 'center'>
                 <Button 
@@ -86,12 +153,43 @@ const PostCard = ({ post }) => {
                     <Icon as = {liked ? FcLike : GoHeart} />
                     {likeCount}
                 </Button>
-                <Button background = 'none' _hover = {{background: 'white'}} size = 'xs'>
-                    View Comments
+
+                {/* Toggle comments*/}
+                <Button background = 'none' _hover = {{background: 'white'}} size = 'xs' onClick={toggleComments}>
+                    {showComments ? 'Hide Comments' : 'View Comments'}
                     ({post.commentsCount})
                 </Button>
             </Flex>
         </Card.Footer>
+
+        {/* Comment Section */}
+        {showComments && (
+            <Box p ={3} bg = 'gray.50'>
+                {loadingComments ? (<Spinner />) : (
+                    <VStack align = 'stretch' spacing = {2}>
+                        {comments.map((c) => (
+                            <Box key = {c.id} p ={2} borderWidth = '1px' borderRadius = 'md' bg = 'white'  color = 'black' shadow = {'sm'}>
+                                <Text fontWeight = 'bold'>{c.username}</Text>
+                                <Text>{c.text}</Text>
+                            </Box>
+                        ))}
+                    </VStack>
+                )}
+
+                {/*Add Comment Input */}
+                <HStack mt = {3}>
+                    <Input 
+                        placeholder = 'Write a comment...'
+                        value = {newComment}
+                        color = 'black'
+                        onChange = {(e) => setNewComment(e.target.value)}
+                    />
+                    <Button size = 'sm' colorScheme = 'blue' onClick = {handleAddComment}>
+                        Post
+                    </Button>
+                </HStack>
+            </Box>
+        )}
     </Card.Root>
   )
 }

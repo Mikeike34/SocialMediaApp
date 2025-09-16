@@ -50,8 +50,8 @@ const UserProfile = () => {
             bgColor = 'white'
             borderRadius={'10px'}
           >
-           <VStack divideY={'2px'} flexDir={'column'} h = '95vh' w = '100%' align = 'stretch'>
-            <Flex h = '10vh' justify = 'center' align = 'center' >
+           <VStack divideY={'2px'} flexDir={'column'} w = '100%' align = 'stretch' spacing = {0}>
+            <Flex h = 'auto' justify = 'center' align = 'center' >
               <Avatar.Root>
                 <Avatar.Fallback name = {user?.username} />
                 <Avatar.Image />
