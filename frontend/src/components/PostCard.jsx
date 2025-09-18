@@ -1,6 +1,7 @@
 import { Avatar, Box, Button, Card, Flex, HStack, Icon, IconButton, Input, Spinner, Text, VStack } from '@chakra-ui/react'
 import { GoHeart } from "react-icons/go";
 import { FcLike } from "react-icons/fc";
+import { MdOutlineDelete } from "react-icons/md";
 import React, { useEffect, useState } from 'react'
 
 const PostCard = ({ post }) => {
@@ -128,17 +129,67 @@ const PostCard = ({ post }) => {
             console.error('Error posting comment:', err);
         }
     };
+
+    //Delete a comment
+    const handleDeleteComment = async (commentId) => {
+        try{
+            const res = await fetch(`http://localhost:5000/api/comments/${commentId}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+
+            if(!res.ok){
+                console.error("Failed to delete comment");
+                return;
+            }
+
+            //Remove the deleted comment from local state
+            setComments(comments.filter((c) => c.id !== commentId));
+        }catch(err){
+            console.error('Error deleting comment:', err);
+        }
+    };
+
+    //User's Posts
+    //Delete your own post
+    const handleDeletePost = async (postId) => {
+        try{
+            const res = await fetch(`http://localhost:5000/api/posts/${postId}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+
+            if(!res.ok){
+                console.error('Failed to delete post');
+                return;
+            }
+            //if response is okay, refresh the page.
+            console.log('Post deleted successfully');
+            window.location.reload();
+            
+        }catch(err){
+            console.error('Error deleting post:', err);
+        }
+    };
     
   return (
     <Card.Root minh = '20vh' w = '60%' justify = 'center' bgColor = 'gray.200' border = 'transparent' shadow={'sm'} borderRadius = '10px'> 
         <Card.Body gap = '2'>
-            <HStack>
+            <Flex w ='100%' justify = 'space-between' align = 'flex-start'>
                 <Avatar.Root>
                     <Avatar.Image />
                     <Avatar.Fallback name = {post.author?.username || 'User'} />
                 </Avatar.Root>
                 <Card.Title color = 'black'>{post.author?.username}</Card.Title>
-            </HStack>
+
+                {/* Delete button only for current user's posts */}
+                <Button background = 'transparent' _hover={{background: 'red.300'}} display = {post.author.id != userID ? 'none' : 'flex'} onClick ={() => handleDeletePost(post._id)}> <Icon as = {MdOutlineDelete} /></Button>
+
+            </Flex>
             <Card.Description color = 'black'>
                 {post.text}
             </Card.Description>
@@ -169,7 +220,10 @@ const PostCard = ({ post }) => {
                     <VStack align = 'stretch' spacing = {2}>
                         {comments.map((c) => (
                             <Box key = {c.id} p ={2} borderWidth = '1px' borderRadius = 'md' bg = 'white'  color = 'black' shadow = {'sm'}>
+                                <Flex w ='100%' justify = 'space-between' align = 'center'>
                                 <Text fontWeight = 'bold'>{c.username}</Text>
+                                <Button background = 'transparent' _hover={{background: 'red.300'}} display = {c.authorId != userID ? 'none' : 'flex'} onClick = {() => handleDeleteComment(c.id)}> <Icon as = {MdOutlineDelete} /></Button>
+                                </Flex>
                                 <Text>{c.text}</Text>
                             </Box>
                         ))}
