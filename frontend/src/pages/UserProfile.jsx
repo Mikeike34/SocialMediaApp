@@ -40,7 +40,7 @@ const UserProfile = () => {
 
   return (
     <Flex minH = '100vh' bgColor = 'gray.600' w = '100%' padding = {0}>
-        <HStack align = 'stretch' w = '100%' mr = {5}>
+        <HStack w = '100%' align= 'stretch' mr = {5}>
           <Sidebar />
           <Flex 
             alignItems={'center'}
@@ -50,8 +50,8 @@ const UserProfile = () => {
             bgColor = 'white'
             borderRadius={'10px'}
           >
-           <VStack divideY={'2px'} flexDir={'column'} w = '100%' align = 'stretch' spacing = {0}>
-            <Flex h = 'auto' justify = 'center' align = 'center' >
+           <VStack divideY={'2px'} flexDir={'column'} h= '95vh' w = '100%' align = 'stretch'>
+            <Flex h = '10vh' justify = 'center' align = 'center' >
               <Avatar.Root>
                 <Avatar.Fallback name = {user?.username} />
                 <Avatar.Image />
