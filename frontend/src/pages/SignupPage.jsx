@@ -1,4 +1,4 @@
-import { Box, Flex, Text, VStack, Input, Button, Link, Field } from '@chakra-ui/react';
+import { Box, Flex, Text, VStack, Input, Button, Link, Field, Heading } from '@chakra-ui/react';
 import React,{ useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
@@ -34,17 +34,30 @@ const SignupPage = () => {
             }
         };
 
+        const backgroundYellow = '#fdfce8';
+        const green = '#1f574f';
+        const accentYellow = '#f6f8b5';
+        const pink = '#ee98e0';
+        const purple = '#a78dfc';
+        const orange = '#f08853';
+
         
   return (
-    <Flex minH = "100vh" align = "center" justify = "center" bgColor={'gray.600'}>
-        <Box bg ="white" p = {8} rounded = 'md' shadow = 'lg' width = 'lg' textAlign= 'center'>
-            <Text fontSize ='2xl' fontWeight ='bold' mb={6} color = {'black'}>
+    <Flex minH = "100vh" align = "center" justify = "center" bgColor ={backgroundYellow}>
+        <Box bg = {green} p = {8} borderRadius = '12px' shadow = 'lg' width = {{base: 'lg', md: '3xl' }} h = {{md: '33vh', xl: '45vh'}} textAlign= 'center' m = {{base: '20px'}}>
+            <Heading
+                fontFamily = "'Gravitas One, serif'"
+                color = {accentYellow}
+                fontSize = '10vh'
+                pb = '10px'
+                pt = '10px'
+            >
                 Register
-            </Text>
+            </Heading>
             <form onSubmit={handleSignup}>
                 <VStack spacing = {4}>
                     <Field.Root required>
-                        <Field.Label color ={'black'}>
+                        <Field.Label color ='white'>
                             Username 
                             <Field.RequiredIndicator />
                         </Field.Label>
@@ -53,11 +66,11 @@ const SignupPage = () => {
                             placeholder = "Create a username"
                             value = {username}
                             onChange={(e) => setUsername(e.target.value)}
-                            color = 'black'
+                            color = 'white'
                         />
                     </Field.Root>
                     <Field.Root required>
-                        <Field.Label color = {'black'}>
+                        <Field.Label color = 'white'>
                             Email
                             <Field.RequiredIndicator />
                         </Field.Label>
@@ -66,11 +79,11 @@ const SignupPage = () => {
                             placeholder ="Enter your email"
                             value = {email}
                             onChange={(e) => setEmail(e.target.value)}
-                            color = 'black'
+                            color = 'white'
                         />
                     </Field.Root>
                     <Field.Root required>
-                        <Field.Label color = {'black'}>
+                        <Field.Label color = 'white'>
                             Password 
                             <Field.RequiredIndicator />
                         </Field.Label>
@@ -79,23 +92,34 @@ const SignupPage = () => {
                             placeholder = "Create a password"
                             value = {password}
                             onChange = {(e) => setPassword(e.target.value)}
-                            color = 'black'
+                            color = 'white'
                         />
                     </Field.Root>
                     <Button
                         type = 'submit'
                         width = '100%'
-                        bgColor = {'gray.400'}
+                        bgColor = 'white'
                         color = "black"
-                        _hover = {{opacity: 0.9}}    
+                        borderRadius = '12px'
+                        transition = 'all 0.25s ease-in-out'
+                        _hover ={{
+                            transform: 'scale(1.02)',
+                            bg: accentYellow,
+                            color: 'black',
+                            shadow: 'md'
+                        }}
+                         _active = {{
+                            bg: accentYellow,
+                            color: 'black',
+                        }}      
                     >
                         Create Account
                     </Button>
                 </VStack>
             </form>
-            <Text mt ={6} fontSize = {'sm'} color = {'black'}>
+            <Text mt ={6} fontSize = {'sm'} color = 'white'>
                 Already have an account?{" "}
-                <Link color= 'blue.500' onClick={() => navigate("/")}>
+                <Link color= 'blue.500' onClick={() => navigate("/login")}>
                     Login Here
                 </Link>
             </Text>

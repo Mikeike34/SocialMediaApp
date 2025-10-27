@@ -1,5 +1,5 @@
 
-import { Box, Flex, Text, VStack, Input, Button, Link, Field } from '@chakra-ui/react';
+import { Box, Flex, Text, VStack, Input, Button, Link, Field, Heading } from '@chakra-ui/react';
 import React,{ useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
@@ -38,13 +38,25 @@ const LoginPage = () => {
         }
     };
 
+    const backgroundYellow = '#fdfce8';
+    const green = '#1f574f';
+    const accentYellow = '#f6f8b5';
+    const pink = '#ee98e0';
+    const purple = '#a78dfc';
+    const orange = '#f08853';
+
     
   return (
-    <Flex minH = "100vh" align = "center" justify = "center" bgColor={'gray.600'}>
-        <Box bg ="white" p = {8} rounded = 'md' shadow = 'lg' width = 'lg' textAlign= 'center'>
-            <Text fontSize ='2xl' fontWeight ='bold' mb={6} color = {'black'}>
+    <Flex minH = "100vh" align = "center" justify = "center" bgColor = {green} >
+        <Box bg = {backgroundYellow} p = {8} borderRadius = '12px' shadow = 'lg' w = {{base: 'lg', md: '2xl'}} h = {{md: '33vh', xl: '40vh'}} textAlign= 'center' m = {{base: '20px'}}>
+            <Heading
+                fontFamily = "'Gravitas One, serif'"
+                color = {purple}
+                fontSize = '10vh'
+                py = {{md: '25px', xl: '15px'}}
+            >
                 Login
-            </Text>
+            </Heading>
             <form onSubmit = {handleLogin}>
                 <VStack spacing = {4}>
                     <Field.Root required>
@@ -76,9 +88,20 @@ const LoginPage = () => {
                     <Button
                         type = 'submit'
                         width = '100%'
-                        bgColor = {'gray.400'}
-                        color = "black"
-                        _hover = {{opacity: 0.9}}    
+                        bgColor = 'black'
+                        color = 'white'
+                        borderRadius = '12px'
+                        transition = 'all 0.25s ease-in-out'
+                        _hover ={{
+                            transform: 'scale(1.02)',
+                            bg: accentYellow,
+                            color: 'black',
+                            shadow: 'md'
+                            }}
+                         _active = {{
+                            bg: accentYellow,
+                            color: 'black',
+                            }}   
                     >
                         Login
                     </Button>
