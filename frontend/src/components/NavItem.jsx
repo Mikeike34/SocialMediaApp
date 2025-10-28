@@ -6,9 +6,9 @@ import React from 'react'
 const NavItem = ({navSize, title, icon, active }) => {
   const navigate = useNavigate();
   const routes = {  //routes to guide button where to navigate user
-    Dashboard: '/feed',
+    Feed: '/feed',
     Profile: '/profile',
-    Share: '/create'
+    Create: '/create'
   };
 
   //Logout functionality
