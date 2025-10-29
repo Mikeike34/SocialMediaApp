@@ -139,8 +139,8 @@ New updates in this repository may happen as I am always tinkering.
 - [x] Add recipe suggestions
 - [X] create user profile page
 - [X] create feed page
-- [ ] Like/Unlike functiuonality
-- [ ] display comments
+- [X] Like/Unlike functiuonality
+- [X] display comments
 - [ ] Incorporate a search function
 - [ ] Include edit post function
 - [ ] Add a place for user notes
