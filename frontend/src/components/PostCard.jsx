@@ -11,7 +11,7 @@ const PostCard = ({ post }) => {
 
     //Like states
     const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(post.likesCount);
+    const [likeCount, setLikeCount] = useState(post.likesCount || 0);
 
 
     //comment states
@@ -44,20 +44,16 @@ const PostCard = ({ post }) => {
                     },
                 });
 
-                if(!res.ok){
-                    console.error('Failed to fetch liked status');
-                    return;
-                }
-
+                if(!res.ok) throw new Error('Failed to fetch liked status');
                 const data = await res.json();
-
-                setLiked(data.liked)
+                setLiked(data.liked);
+                setLikeCount(data.likesCount);
+                console.log('Fetched Like status: ', data);
             }catch(err){
-                console.error("Error checking liked status:", err);
+                console.error('Error fetching like status: ', err);
             }
         };
-
-        if(token && post?._id){
+        if (token && post?._id){
             fetchLikedStatus();
         }
     },[post._id, token]);
@@ -68,24 +64,38 @@ const PostCard = ({ post }) => {
             alert('You cannot like your own post.');
             return;
         }
-
         try{
+            //optimistically update UI first for instant feedback
+            setLiked((prev) => !prev);
+            setLikeCount((prev) => (liked ? prev -1 : prev + 1));
+
             const res = await fetch(`http://localhost:5000/api/likes/${post._id}` , {
                 method: liked ? 'DELETE' : 'POST', //toggle like
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
-                }
+                },
             });
-
+            //If API fails, revert the optimistic update
             if(!res.ok){
                 console.error("Failed to update likes");
+                setLiked((prev) => !prev);
+                setLikeCount((prev) => (liked ? prev + 1 : prev - 1));
                 return;
             }
+            //re-fetching to guarentee correct like status
+            const updatedStatus = await fetch(`http://localhost:5000/api/likes/${post._id}/status`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
 
             //update local state
-            setLiked(!liked);
-            setLikeCount(prev => liked ? prev - 1: prev + 1);
+            if (updatedStatus.ok){
+                const data = await updatedStatus.json();
+                setLiked(data.liked);
+                setLikeCount(data.likesCount);
+            }
 
         } catch(err){
             console.error('Network Error:', err);
@@ -232,8 +242,9 @@ const PostCard = ({ post }) => {
                     onClick = {handleLike}
                     background = 'transparent'
                     _hover = {{transform: 'scale(1.05)', transition: '0.1s ease-in-out'}}
+                    _active = {{transform: 'scale(0.9'}}
                 >
-                    <Icon as = {liked ? FcLike : GoHeart} boxSize = {5} />
+                    <Icon as = {liked ? FcLike : GoHeart} boxSize = {5} transition = 'all 0.2s ease' />
                     <Text ml = {1}>{likeCount}</Text> {/* prevents squishing */}
                 </Button>
 

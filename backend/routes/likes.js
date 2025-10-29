@@ -1,4 +1,5 @@
     const express = require('express');
+    const mongoose = require('mongoose');
     const router = express.Router();
     const Like = require('../models/Like');
     const authenticateToken = require('../middleware/auth');
@@ -27,8 +28,8 @@
             const userId = req.user.id;
 
             const like = await Like.findOneAndDelete({
-                postId: mongoose.Types.ObjectId(postId),
-                userId: userId
+                postId: new mongoose.Types.ObjectId(postId),
+                userId: userId,
             });
 
             if(!like){
@@ -40,28 +41,23 @@
         }
     });
 
-    //Check if current user has already liked a post
+    //Check if current user has already liked a post and gets like info
     router.get('/:postId/status', authenticateToken, async (req, res) => {
         try{
             const postId = req.params.postId;
             const userId = req.user.id;
 
             const existingLike = await Like.findOne({
-                postId: mongoose.Types.ObjectId(postId),
+                postId: new mongoose.Types.ObjectId(postId),
                 userId: userId
             });
-            res.json({liked: !existingLike });
-        }catch(err){
-            res.status(500).json({error: err.message});
-        }
-    });
 
-    //get likes count for a post
-    router.get('/:postId', async(req , res) => {
-        try{
-            const count = await Like.countDocuments({ postId: req.params.postId});
-            res.json({postId: req.params.postId, likes: count});
+            const liked = !!existingLike;
+            const likesCount = await Like.countDocuments({ postId });
+
+            res.json({liked, likesCount});
         }catch(err){
+            console.error(err);
             res.status(500).json({error: err.message});
         }
     });
