@@ -3,6 +3,7 @@ import { GoHeart } from "react-icons/go";
 import { FcLike } from "react-icons/fc";
 import { MdOutlineDelete } from "react-icons/md";
 import React, { useEffect, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const PostCard = ({ post }) => {
     const userID = localStorage.getItem('userID');
@@ -19,6 +20,19 @@ const PostCard = ({ post }) => {
     const [loadingComments, setLoadingComments] = useState(false);
     const [newComment, setNewComment] = useState('');
 
+    //router const
+    //using to soft-refresh when commenting
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    //colors
+    const backgroundYellow = '#fdfce8';
+    const green = '#1f574f';
+    const accentYellow = '#f6f8b5';
+    const pink = '#ee98e0';
+    const purple = '#a78dfc';
+    const orange = '#f08853';
+
     
 
     useEffect(() => {
@@ -30,7 +44,10 @@ const PostCard = ({ post }) => {
                     },
                 });
 
-                if(!res.ok) return;
+                if(!res.ok){
+                    console.error('Failed to fetch liked status');
+                    return;
+                }
 
                 const data = await res.json();
 
@@ -47,7 +64,7 @@ const PostCard = ({ post }) => {
 
     const handleLike = async () => {
         //prevent liking own post
-        if(post.author.id === userID){
+        if(post.author?._id === userID){
             alert('You cannot like your own post.');
             return;
         }
@@ -117,13 +134,9 @@ const PostCard = ({ post }) => {
             );
 
             if(res.ok){
-                const savedComment = await res.json();
-
-                setComments([
-                    ...comments,
-                    {...savedComment, username: 'You'}, //backend returns authorId only
-                ]);
+                await fetchComments();
                 setNewComment('');
+                post.commentsCount = (post.commentsCount || 0) + 1;
             }
         }catch(err){
             console.error('Error posting comment:', err);
@@ -146,7 +159,8 @@ const PostCard = ({ post }) => {
             }
 
             //Remove the deleted comment from local state
-            setComments(comments.filter((c) => c.id !== commentId));
+            setComments((prev) => prev.filter((c) => c.id !== commentId));
+            post.commentsCount = Math.max((post.commentsCount || 1) - 1, 0);
         }catch(err){
             console.error('Error deleting comment:', err);
         }
@@ -177,8 +191,18 @@ const PostCard = ({ post }) => {
     };
     
   return (
-    <Card.Root minh = '20vh' w = '60%' justify = 'center' bgColor = 'gray.200' border = 'transparent' shadow={'sm'} borderRadius = '10px'> 
+    <Card.Root 
+        minh = '20vh' 
+        w = '90%' 
+        justify = 'center' 
+        bgColor = {accentYellow} 
+        border = 'transparent' 
+        overflow = 'hidden'
+        shadow = 'sm' 
+        borderRadius = '12px'
+    > 
         <Card.Body gap = '2'>
+            {/*Header of a post */}
             <Flex w ='100%' justify = 'space-between' align = 'flex-start'>
                 <Avatar.Root>
                     <Avatar.Image />
@@ -187,9 +211,16 @@ const PostCard = ({ post }) => {
                 <Card.Title color = 'black'>{post.author?.username}</Card.Title>
 
                 {/* Delete button only for current user's posts */}
-                <Button background = 'transparent' _hover={{background: 'red.300'}} display = {post.author.id != userID ? 'none' : 'flex'} onClick ={() => handleDeletePost(post._id)}> <Icon as = {MdOutlineDelete} /></Button>
-
+                <Button 
+                    background = 'transparent' 
+                    _hover={{background: 'red.300'}} 
+                    display = {post.author?._id != userID ? 'none' : 'flex'} 
+                    onClick ={() => handleDeletePost(post._id)}
+                > 
+                    <Icon as = {MdOutlineDelete} />
+                </Button>
             </Flex>
+            {/*Post content*/}
             <Card.Description color = 'black'>
                 {post.text}
             </Card.Description>
@@ -200,13 +231,21 @@ const PostCard = ({ post }) => {
                 <Button 
                     onClick = {handleLike}
                     background = 'transparent'
+                    _hover = {{transform: 'scale(1.05)', transition: '0.1s ease-in-out'}}
                 >
-                    <Icon as = {liked ? FcLike : GoHeart} />
-                    {likeCount}
+                    <Icon as = {liked ? FcLike : GoHeart} boxSize = {5} />
+                    <Text ml = {1}>{likeCount}</Text> {/* prevents squishing */}
                 </Button>
 
                 {/* Toggle comments*/}
-                <Button background = 'none' _hover = {{background: 'white'}} size = 'xs' onClick={toggleComments}>
+                <Button 
+                    background = 'none' 
+                    _hover = {{bg: 'white'}} 
+                    _active = {{bg: 'white'}} 
+                    transition = 'all 0.2s ease-in-out' 
+                    size = 'xs' 
+                    onClick={toggleComments}
+                >
                     {showComments ? 'Hide Comments' : 'View Comments'}
                     ({post.commentsCount})
                 </Button>
@@ -219,10 +258,10 @@ const PostCard = ({ post }) => {
                 {loadingComments ? (<Spinner />) : (
                     <VStack align = 'stretch' spacing = {2}>
                         {comments.map((c) => (
-                            <Box key = {c.id} p ={2} borderWidth = '1px' borderRadius = 'md' bg = 'white'  color = 'black' shadow = {'sm'}>
+                            <Box key = {c._id || c.id} p ={2} borderWidth = '1px' borderRadius = 'md' bg = 'white'  color = 'black' shadow = {'sm'}>
                                 <Flex w ='100%' justify = 'space-between' align = 'center'>
                                 <Text fontWeight = 'bold'>{c.username}</Text>
-                                <Button background = 'transparent' _hover={{background: 'red.300'}} display = {c.authorId != userID ? 'none' : 'flex'} onClick = {() => handleDeleteComment(c.id)}> <Icon as = {MdOutlineDelete} /></Button>
+                                <Button background = 'transparent' _hover={{bg: 'red.300'}} _active = {{bg: 'red.300'}} transition = "all 0.2s ease-in-out" display = {c.authorId != userID ? 'none' : 'flex'} onClick = {() => handleDeleteComment(c.id)}> <Icon as = {MdOutlineDelete} /></Button>
                                 </Flex>
                                 <Text>{c.text}</Text>
                             </Box>
@@ -238,7 +277,22 @@ const PostCard = ({ post }) => {
                         color = 'black'
                         onChange = {(e) => setNewComment(e.target.value)}
                     />
-                    <Button size = 'sm' colorScheme = 'blue' onClick = {handleAddComment}>
+                    <Button 
+                        size = 'sm' 
+                        colorScheme = 'blue'
+                        borderRadius = '12px' 
+                        _hover = {{
+                            bg: accentYellow,
+                            shadow: 'xs'
+                        }}
+                        _active = {{
+                            bg: accentYellow
+                        }}
+                        transition = 'all 0.2s ease-in-out'
+                        onClick = {() => {
+                            handleAddComment();
+                        }}
+                    >
                         Post
                     </Button>
                 </HStack>
