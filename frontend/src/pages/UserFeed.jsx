@@ -8,7 +8,7 @@ const UserFeed = () => {
   const userID = localStorage.getItem('userID');
   const token = localStorage.getItem('token');
 
-  {/*Colors*/}
+  //colors
   const backgroundYellow = '#fdfce8';
   const green = '#1f574f';
   const accentYellow = '#f6f8b5';
