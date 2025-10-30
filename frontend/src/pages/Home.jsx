@@ -44,7 +44,7 @@ const Home = () => {
                             transform = 'scaleY(1.3)'
                             transformOrigin = 'bottom'
                         >
-                            to Connnect?
+                            to Connect?
                         </Heading>
                     </VStack>
                 </Box>
