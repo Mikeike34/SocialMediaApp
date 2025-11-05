@@ -67,11 +67,37 @@ const CreatePost = () => {
         }
     };
 
+//colors
+  const backgroundYellow = '#fdfce8';
+  const green = '#1f574f';
+  const accentYellow = '#f6f8b5';
+  const pink = '#ee98e0';
+  const purple = '#a78dfc';
+  const orange = '#f08853';
+
   return (
-    <Flex minH = '100vh' bgColor = 'gray.600' w = '100%'>
+    <Flex
+        minH = '100vh'
+        bg = {green}
+        p = {{base: 2, md: 4, lg: 6}}
+    >
         <Sidebar />
-        <Flex flex = '1' justify = 'center' align = 'flex-start' mt = {5} mb = {5}>
-            <Box bg = 'white' p ={8} borderRadius={'30px'} shadow = 'md' h = '70%' w = '70%' textAlign = 'center'>
+        <Flex 
+            flex = '1' 
+            justify = 'center' 
+            align = 'flex-start' 
+            mt = {5} 
+            mb = {5}
+        >
+            <Box 
+                bg = {backgroundYellow} 
+                p ={8} 
+                borderRadius={'30px'} 
+                shadow = 'md' 
+                h = '70%' 
+                w = '70%' 
+                textAlign = 'center'
+            >
                 <Text fontSize = '2xl' fontWeight = 'bold' mb = {6} color = {'black'}>
                     Write a Post
                 </Text>
@@ -87,7 +113,15 @@ const CreatePost = () => {
                                 placeholder = 'Post Content Goes Here' 
                             />
                         </Field.Root>
-                        <Button bgColor = '#99AFD7' w='1/3' type = 'submit' isLoading= {loading}>
+                        <Button 
+                            bg = '#99AFD7' 
+                            w ='1/3' 
+                            type = 'submit' 
+                            isLoading = {loading}
+                            _hover={{bg: accentYellow, shadow: 'xs'}}
+                            _active ={{bg: accentYellow}}
+                            transition = 'all 0.1s ease-in-out'
+                        >
                             Share
                         </Button>
                     </VStack> 
