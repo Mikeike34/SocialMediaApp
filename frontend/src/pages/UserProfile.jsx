@@ -1,4 +1,5 @@
 import PostCard from '@/components/PostCard'
+import Header from '@/components/Header'
 import ProfileFeed from '@/components/ProfileFeed'
 import Sidebar from '@/components/Sidebar'
 import { Avatar, Box, Flex, Heading, HStack, Text, VStack } from '@chakra-ui/react'
@@ -66,6 +67,7 @@ const UserProfile = () => {
             justifyContent = 'center'
           >
             <Sidebar />
+            <Header />
           </Box>
 
           {/*Content (User's posts)*/}
@@ -88,7 +90,7 @@ const UserProfile = () => {
             spacing = '0'
            >
 
-            {/*HEader Section */}
+            {/*Header Section */}
             <Flex 
               h = {{base: '8vh', md: '10vh'}} 
               justify = 'center' 
@@ -104,6 +106,7 @@ const UserProfile = () => {
                 <Text color = 'gray' fontSize = 'sm' wordBreak = {'break-word'}>{user?.email}</Text>
               </Flex>
             </Flex>
+
 
             {/*Posts */}
             <Flex 
