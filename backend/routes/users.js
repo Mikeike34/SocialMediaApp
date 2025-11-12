@@ -1,9 +1,12 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const { createUser, getUserByEmail, getUserById, getFollowingCount, getFollowerCount } = require('../models/postgresUser');
+const {searchUsersByUsername} = require('../models/postgresUser');
+const {searchFollowing} = require('../models/postgresUser');
 const { getFollowers, getFollowing} = require('../models/postgresFollowers');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const authenticateToken = require('../middleware/auth');
 
 
 //signup
@@ -44,6 +47,36 @@ router.post('/login', async (req , res) => {
         res.json({message: 'Login Successful', token, user: {id: user.id, username: user.username, email: user.email }});
     }catch(err){
         res.status(500).json({error: err.message});
+    }
+});
+
+//Search for users by username
+router.get('/search', async (req, res) => {
+    const {query} = req.query;
+    if(!query) return res.json([]); //returns empty array if no query
+
+    try{
+        const users = await searchUsersByUsername(query);
+        res.json(users);
+    }catch(err){
+        console.error(err);
+        res.status(500).json({error: 'Internal server error'})
+    }
+});
+
+//Get list of users who are following current user
+router.get('/search/following', authenticateToken, async(req,res) => {
+    const {query} = req.query;
+    const currentUserId = req.user.id;
+
+    if(!query) return res.json([]);
+
+    try{
+        const users = await searchFollowing(query, currentUserId);
+        res.json(users); //returns an array of users with isFollowing
+    }catch(err) {
+        console.error(err);
+        res.status(500).json({error: 'Internal server error'});
     }
 });
 
@@ -92,5 +125,7 @@ router.get('/following/:id/count', async (req , res) => {
         res.status(500).json({error:err.message});
     }
 });
+
+
 
 module.exports = router;

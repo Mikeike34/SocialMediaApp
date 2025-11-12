@@ -5,7 +5,7 @@ async function createUser(username, email, hashedPassword){
     const query = `
         INSERT INTO users (username, email, password_hash)
         VALUES($1, $2, $3)
-        RETURNING Id, username, email, bio, profile_pic, created_at
+        RETURNING id, username, email, bio, profile_pic, created_at
     `;
     const values = [username, email, hashedPassword];
     const result = await pool.query(query, values);
@@ -44,10 +44,53 @@ async function getFollowingCount(userId){
     return parseInt(result.rows[0].count, 10);
 }
 
+//Search users by username (case-insensitive)
+async function searchUsersByUsername(query){
+    try{
+        const result = await pool.query(
+            `SELECT id, username, email, profile_pic
+            FROM users
+            WHERE username ILIKE $1
+            ORDER BY username ASC
+            LIMIT 10;`,
+            [`%${query}%`]
+        );
+        return result.rows;
+    }catch(err){
+        console.error('Error searching users: ', err);
+        throw err;
+    }
+}
+
+//Search users who the current user follows
+async function searchFollowing(query, currentUserId){
+    try{
+        const result = await pool.query(
+            `SELECT u.id, u.username, u.email, u.profile_pic,
+                EXISTS (
+                    SELECT 1 FROM followers f
+                    WHERE f.follower_id = $1
+                    AND f.following_id = u.id
+                ) AS "isFollowing"
+            FROM users u
+            WHERE username ILIKE $2
+            ORDER BY username ASC
+            LIMIT 10;`,
+            [currentUserId, `%${query}%`]
+        );
+        return result.rows;
+    }catch(err){
+        console.error('Error searching users with follow status: ', err);
+        throw err;
+    }
+}
+
 module.exports = {
     createUser,
     getUserByEmail,
     getUserById,
     getFollowerCount,
-    getFollowingCount
+    getFollowingCount,
+    searchUsersByUsername,
+    searchFollowing
 };
