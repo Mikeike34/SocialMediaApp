@@ -53,73 +53,73 @@ const UserProfile = () => {
       bg = {green} 
       p = {{base: 2, md: 4, lg: 6}}
     >
-        <HStack 
-          w = '100%' 
-          align= 'stretch' 
-          spacing = {{base: 0, md: 4, lg: 6}}
-          flexDir = {{base: 'column', xl: 'row'}}
+      <Header />
+      <HStack 
+        w = '100%' 
+        align= 'stretch' 
+        spacing = {{base: 0, md: 4, lg: 6}}
+        flexDir = {{base: 'column', xl: 'row'}}
+      >
+
+        {/*Navigation */}
+        <Box
+          w = {{md: '100px', lg: '150px'}}
+          display = 'flex'
+          justifyContent = 'center'
         >
+          <Sidebar />
+        </Box>
 
-          {/*Navigation */}
-          <Box
-            w = {{md: '100px', lg: '150px'}}
-            display = 'flex'
-            justifyContent = 'center'
+        {/*Content (User's posts)*/}
+        <Flex 
+          alignItems = 'center'
+          minH = '100vh'
+          flex = '1'
+          mt = {{base: 2, xl: 4}}
+          bg = {backgroundYellow}
+          borderRadius = '12px'
+          p = {{base: 2, md: 4}}
+          overflow = 'auto'
+        >
+          <VStack 
+          divideY = '2px'
+          flexDir = 'column' 
+          h= 'full' 
+          w = '100%' 
+          align = 'stretch'
+          spacing = '0'
           >
-            <Sidebar />
-            <Header />
-          </Box>
 
-          {/*Content (User's posts)*/}
+          {/*Header Section */}
           <Flex 
-            alignItems = 'center'
-            minH = '100vh'
-            flex = '1'
-            mt = {{base: 2, xl: 4}}
-            bg = {backgroundYellow}
-            borderRadius = '12px'
-            p = {{base: 2, md: 4}}
-            overflow = 'auto'
+            h = {{base: '8vh', md: '10vh'}} 
+            justify = 'center' 
+            align = 'center'
+            px = {{base: 2, md: 4}} 
           >
-           <VStack 
-            divideY = '2px'
-            flexDir = 'column' 
-            h= 'full' 
-            w = '100%' 
-            align = 'stretch'
-            spacing = '0'
-           >
-
-            {/*Header Section */}
-            <Flex 
-              h = {{base: '8vh', md: '10vh'}} 
-              justify = 'center' 
-              align = 'center'
-              px = {{base: 2, md: 4}} 
-            >
-              <Avatar.Root>
-                <Avatar.Fallback name = {user?.username} />
-                <Avatar.Image />
-              </Avatar.Root>
-              <Flex flexDir = 'column' ml = {2} alignItems = {'center'}>
-                <Heading as = 'h2' color = 'black'>{user?.username}</Heading>
-                <Text color = 'gray' fontSize = 'sm' wordBreak = {'break-word'}>{user?.email}</Text>
-              </Flex>
+            <Avatar.Root>
+              <Avatar.Image src = { user?.profile_pic}/>
+              <Avatar.Fallback name = {user?.username} />
+            </Avatar.Root>
+            <Flex flexDir = 'column' ml = {2} alignItems = {'center'}>
+              <Heading as = 'h2' color = 'black'>{user?.username}</Heading>
+              <Text color = 'gray' fontSize = 'sm' wordBreak = {'break-word'}>{user?.email}</Text>
             </Flex>
-
-
-            {/*Posts */}
-            <Flex 
-              justify = 'center'
-              px = {{base: 2, md: 4}}
-            >
-              <ProfileFeed userID = {userID} token = {token} />
-            </Flex>
-
-           </VStack>
           </Flex>
 
-        </HStack>
+
+          {/*Posts */}
+          <Flex 
+            justify = 'center'
+            px = {{base: 2, md: 4}}
+          >
+            <ProfileFeed userID = {userID} token = {token} />
+          </Flex>
+
+          </VStack>
+        </Flex>
+
+      </HStack>
 
     </Flex>
   )

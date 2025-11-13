@@ -9,6 +9,7 @@ const PostCard = ({ post }) => {
     const userID = localStorage.getItem('userID');
     const token = localStorage.getItem('token');
 
+
     //Like states
     const [liked, setLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(post.likesCount || 0);
@@ -215,7 +216,7 @@ const PostCard = ({ post }) => {
             {/*Header of a post */}
             <Flex w ='100%' justify = 'space-between' align = 'flex-start'>
                 <Avatar.Root>
-                    <Avatar.Image />
+                    <Avatar.Image src = {post.author?.profile_pic}/>
                     <Avatar.Fallback name = {post.author?.username || 'User'} />
                 </Avatar.Root>
                 <Card.Title color = 'black'>{post.author?.username}</Card.Title>
@@ -271,8 +272,12 @@ const PostCard = ({ post }) => {
                         {comments.map((c) => (
                             <Box key = {c._id || c.id} p ={2} borderWidth = '1px' borderRadius = 'md' bg = 'white'  color = 'black' shadow = {'sm'}>
                                 <Flex w ='100%' justify = 'space-between' align = 'center'>
-                                <Text fontWeight = 'bold'>{c.username}</Text>
-                                <Button background = 'transparent' _hover={{bg: 'red.300'}} _active = {{bg: 'red.300'}} transition = "all 0.2s ease-in-out" display = {c.authorId != userID ? 'none' : 'flex'} onClick = {() => handleDeleteComment(c.id)}> <Icon as = {MdOutlineDelete} /></Button>
+                                    <Avatar.Root>
+                                        <Avatar.Image src = {c.profile_pic}/>
+                                        <Avatar.Fallback name = {c.username || 'User'} />
+                                    </Avatar.Root>
+                                    <Text fontWeight = 'bold'>{c.username}</Text>
+                                    <Button background = 'transparent' _hover={{bg: 'red.300'}} _active = {{bg: 'red.300'}} transition = "all 0.2s ease-in-out" display = {c.authorId != userID ? 'none' : 'flex'} onClick = {() => handleDeleteComment(c.id)}> <Icon as = {MdOutlineDelete} /></Button>
                                 </Flex>
                                 <Text>{c.text}</Text>
                             </Box>
