@@ -1,12 +1,40 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const { createUser, getUserByEmail, getUserById, getFollowingCount, getFollowerCount } = require('../models/postgresUser');
+const { createUser, getUserByEmail, getUserById, getFollowingCount, getFollowerCount, updateProfilePic, updateUsername } = require('../models/postgresUser');
 const {searchUsersByUsername} = require('../models/postgresUser');
 const {searchFollowing} = require('../models/postgresUser');
 const { getFollowers, getFollowing} = require('../models/postgresFollowers');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const authenticateToken = require('../middleware/auth');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+
+const UPLOAD_DIR = path.join(__dirname, '..', 'uploads');
+
+
+try{
+     if (!fs.existsSync(UPLOAD_DIR)) {
+        fs.mkdirSync(UPLOAD_DIR, { recursive: true }); // create parent folders if needed
+        console.log('Created uploads folder at:', UPLOAD_DIR);
+    }
+}catch(err){
+    console.error('Failed to create uploads folder:',err);
+}
+
+//configuring multer to save uploaded images to uploads/ folder
+const storage = multer.diskStorage({
+    destination: function(req,file, cb){
+        cb(null, UPLOAD_DIR);
+    },
+    filename: function (req, file, cb){
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({storage});
 
 
 //signup
@@ -94,7 +122,7 @@ router.get('/:id', async (req , res) => {
             username: user.username,
             email: user.email,
             bio: user.bio,
-            profile_pic: user.profile_pic,
+            profile_pic: user.profile_pic || null,
             created_at: user.created_at,
             followerCount,
             followingCount
@@ -125,6 +153,44 @@ router.get('/following/:id/count', async (req , res) => {
         res.status(500).json({error:err.message});
     }
 });
+
+//update Profile pic
+router.put('/:id/profile_pic', upload.single('profile_pic'), async(req, res) => {
+    try{
+        const userId = req.params.id;
+        if(!req.file) return res.status(400).json({error: 'No file uploaded '});
+
+        //get existing profilePic URL
+        const user = await getUserById(userId);
+
+        //if there is an existing profile pic, delete it from /uploads
+        if(user.profile_pic){
+            try{
+                const oldFileName = path.basename(user.profile_pic);
+                const oldFilePath = path.join(__dirname, '..', 'uploads', oldFileName);
+
+                fs.unlink(oldFilePath, (err) => {
+                    if(err){
+                        console.warn('Failed to delete old profile picture:', err.message);
+                        //do not block upload if old file deletion fails
+                    }
+                });
+            }catch(err){
+                console.warn('Error processing old profile picture:', err.message);
+            }
+        }
+
+        //save the file path as URL in DB
+        const profilePicUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+        const updatedUser = await updateProfilePic(userId, profilePicUrl);
+
+        res.json({user: updatedUser});
+    }catch(err){
+        console.error(err);
+        res.status(500).json({error: 'Server error'});
+    }
+});
+
 
 
 

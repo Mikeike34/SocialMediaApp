@@ -85,6 +85,32 @@ async function searchFollowing(query, currentUserId){
     }
 }
 
+//Update username
+async function updateUsername(userId, newUsername){
+    const query = `
+        UPDATE users
+        SET username = $1
+        WHERE id = $2
+        RETURNING id, username, email, bio, profile_pic, created_at
+    `;
+    const values = [newUsername, userId];
+    const result = await pool.query(query, values);
+    return result.rows[0];
+}
+
+//update profile picture
+async function updateProfilePic(userId, profilePicUrl){
+    const query = `
+        UPDATE users
+        SET profile_pic = $1
+        WHERE id = $2
+        RETURNING id, username, email, bio, profile_pic, created_at
+    `;
+    const values = [profilePicUrl, userId];
+    const result = await pool.query(query, values);
+    return result.rows[0];
+}
+
 module.exports = {
     createUser,
     getUserByEmail,
@@ -92,5 +118,7 @@ module.exports = {
     getFollowerCount,
     getFollowingCount,
     searchUsersByUsername,
-    searchFollowing
+    searchFollowing,
+    updateProfilePic,
+    updateUsername
 };

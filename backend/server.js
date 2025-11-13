@@ -1,11 +1,15 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 
 const app = express();
 app.use(cors());
 app.use(express.json()); //parse JSON bodies
+
+//serve uploads folder publicly
+app.use(`/uploads`, express.static(path.join(__dirname, 'uploads')));
 
 //Database Connections
 const mongoose = require('./databases/mongodb');
@@ -16,6 +20,7 @@ pgPool.query('SELECT NOW()', (err, res) => {
     if(err) console.error('PostgreSQL error: ', err);
     else console.log('PostgreSQL time: ', res.rows[0]);
 });
+
 
 //API Routes
 const postRoutes = require('./routes/posts');
