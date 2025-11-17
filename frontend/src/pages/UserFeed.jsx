@@ -60,7 +60,7 @@ const UserFeed = () => {
             >
               {/*Header Section */}
             <Flex 
-              h = {{base: '8vh', md: '10vh'}} 
+              h = {{base: '6vh', md: '3vh', lg: '2vh', xl: '4vh'}} 
               justify = 'center' 
               align = 'center'
               px = {{base: 2, md: 4}}
