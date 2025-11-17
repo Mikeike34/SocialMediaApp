@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Flex, Heading, HStack, Icon, Input, InputGroup, List, ListItem, Spinner, Text, VStack } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { IoSearch } from "react-icons/io5";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 
 const Header = ({showProfileInfo = false}) => {
@@ -12,6 +12,7 @@ const Header = ({showProfileInfo = false}) => {
     const [ loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const userID = localStorage.getItem ('userID');
     const token = localStorage.getItem('token');
@@ -19,15 +20,23 @@ const Header = ({showProfileInfo = false}) => {
     //fetch current user data
     useEffect(() => {
         let isMounted = true;
-        if(!showProfileInfo || !userID || !token) return;
+        if(!userID || !token) return;
 
         const fetchUser = async() => {
             try{
                 const res = await fetch(`http://localhost:5000/api/users/${userID}`,{
                     headers: {Authorization: `Bearer ${token}`},
                 });
+
                 const data = await res.json();
-                if(isMounted && res.ok) setUser(data);
+                console.log("Fetch response status:", res.status);
+                console.log("Fetch response data:", data);
+
+                if(isMounted && res.ok){
+                    setUser(data);
+                }else{
+                    console.log("Fetch failed, not setting user")
+                }
             }catch(err){
                 console.error('Error fetching user: ', err);
             }
@@ -116,8 +125,6 @@ const Header = ({showProfileInfo = false}) => {
         }
     };
 
-    console.log("Search results: ", results);
-
   return (
     <Flex
         pos = 'fixed'
@@ -125,8 +132,8 @@ const Header = ({showProfileInfo = false}) => {
         left = '0'
         w = '100%'
         h = '100px'
-        bg = 'blue'
-        boxShadow = '0 -2px 10px rgba(0,0,0,0.1)'
+        bg = 'white'
+        boxShadow = 'sm'
         justifyContent = 'space-between'
         alignItems = 'center'
         pt = '10px'
@@ -144,15 +151,30 @@ const Header = ({showProfileInfo = false}) => {
 
         >
             <Box
-                flex = '1'
-                bg = 'green'
+                flex = {{base: '.5', md: '1'}}
+                bg = 'white'
                 h = '100%'
                 display = 'flex'
                 justifyContent = 'center'
+                color = 'black'
             >
                 <VStack p = '5px'>
-                    <Text>Username</Text>
-                    <Button onClick = {() => navigate("/update")}>Update Profile</Button>
+                    <HStack>
+                        <Avatar.Root>
+                            <Avatar.Image src = { user?.profile_pic} />
+                            <Avatar.Fallback name = {user?.username} />
+                        </Avatar.Root>
+                        <Text>{user?.username}</Text>
+                    </HStack>
+                    {location.pathname === '/profile' && (
+                        <Button 
+                            onClick = {() => navigate("/update")}
+                            bg = '#AEC8CA'
+                            size = 'xs'
+                        >
+                            Update Profile
+                        </Button>
+                    )}  
                 </VStack>
             </Box>
 
@@ -164,12 +186,12 @@ const Header = ({showProfileInfo = false}) => {
             >
                 <Flex
                     align = 'center'
-                    bg = 'gray.100'
+                    bg = '#AEC8CA'
                     borderRadius = 'full'
                     px = '4'
                     py = '1'
                     _focusWithin = {{
-                        bg: 'white',
+                        bg: '#AEC8CA',
                         boxShadow: '0 0 0 2px var(--chakra-colors-blue-400)',
                     }}
                 >

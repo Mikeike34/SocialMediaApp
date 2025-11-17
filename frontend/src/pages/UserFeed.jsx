@@ -1,3 +1,4 @@
+import Header from '@/components/Header';
 import MainFeed from '@/components/MainFeed';
 import Sidebar from '@/components/Sidebar';
 import { Avatar, Box, Flex, Heading, HStack, Text, VStack } from '@chakra-ui/react'
@@ -64,6 +65,7 @@ const UserFeed = () => {
               align = 'center'
               px = {{base: 2, md: 4}}
             >
+              <Header />
               <Heading 
                 as = 'h2' 
                 color = 'black'

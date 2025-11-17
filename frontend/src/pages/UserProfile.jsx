@@ -53,7 +53,7 @@ const UserProfile = () => {
       bg = {green} 
       p = {{base: 2, md: 4, lg: 6}}
     >
-      <Header />
+      <Header showprofileInfo = {true}/>
       <HStack 
         w = '100%' 
         align= 'stretch' 
@@ -92,7 +92,7 @@ const UserProfile = () => {
 
           {/*Header Section */}
           <Flex 
-            h = {{base: '8vh', md: '10vh'}} 
+            h = {{base: '7vh', md: '3vh', lg: '2vh', xl: '4vh'}} 
             justify = 'center' 
             align = 'center'
             px = {{base: 2, md: 4}} 
