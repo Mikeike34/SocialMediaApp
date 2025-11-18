@@ -225,7 +225,7 @@ const PostCard = ({ post }) => {
                 <Button 
                     background = 'transparent' 
                     _hover={{background: 'red.300'}} 
-                    display = {post.author?._id != userID ? 'none' : 'flex'} 
+                    display = {post?.authorId != userID ? 'none' : 'flex'} 
                     onClick ={() => handleDeletePost(post._id)}
                 > 
                     <Icon as = {MdOutlineDelete} />

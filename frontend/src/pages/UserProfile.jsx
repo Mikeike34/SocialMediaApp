@@ -81,6 +81,7 @@ const UserProfile = () => {
           borderRadius = '12px'
           p = {{base: 2, md: 4}}
           overflow = 'auto'
+          pb = {{base: '40px', md: '60px', xl: '50px'}}
         >
           <VStack 
           divideY = '2px'
