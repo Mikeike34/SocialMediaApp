@@ -131,8 +131,8 @@ const Sidebar = () => {
                 mb = {4}
             >
                 <Avatar.Root>
+                    <Avatar.Image src = {user?.profile_pic}/>
                     <Avatar.Fallback name = {user?.username} />
-                    <Avatar.Image />
                 </Avatar.Root>
                 <Flex flexDir = 'column' ml = {2} display={navSize == 'small' ? 'none' : 'flex'}>
                     <Heading 
