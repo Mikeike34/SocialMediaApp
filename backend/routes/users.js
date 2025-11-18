@@ -191,6 +191,29 @@ router.put('/:id/profile_pic', upload.single('profile_pic'), async(req, res) => 
     }
 });
 
+//Update Username
+router.put('/:id/username', authenticateToken, async (req, res) => {
+    try{
+        const userId = req.params.id;
+        const {username} = req.body;
+
+        if(!username || username.trim() === ''){
+            return res.status(400).json({error: 'Username cannot be empty'});
+        }
+
+        const updateUser = await updateUsername(userId, username);
+
+        if(!updateUser){
+            return res.status(404).json({error: 'User not found'});
+        }
+
+        res.json(updateUser);
+    }catch(err){
+        console.error("Username update error: ", err);
+        res.status(500).json({error: 'Server error updating username'});
+    }
+});
+
 
 
 
