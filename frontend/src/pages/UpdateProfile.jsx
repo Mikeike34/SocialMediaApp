@@ -9,6 +9,7 @@ const UpdateProfile = () => {
     const [selectedFile, setSelectedFile] = useState(null); //store selected image file
     const [preview, setPreview] = useState(null); //preview the URL for the file
     const [uploading, setUploading] = useState(false);
+    const [newUsername, setNewUsername] = useState('');
 
     const userID = localStorage.getItem('userID');
     const token = localStorage.getItem('token');
@@ -112,6 +113,60 @@ const UpdateProfile = () => {
             setUploading(false);
         }
     };
+
+    //Change username
+    const handleChangeUsername = async() => {
+        if(!newUsername.trim()){
+            toaster.create({
+                description: "Username cannot be empty",
+                type: 'warning',
+                duration: 2000,
+                closable: true,
+            });
+            return;
+        }
+
+        try{
+            const res = await fetch(`http://localhost:5000/api/users/${userID}/username`,{
+                method: 'PUT',
+                headers: {
+                    "Content-Type": 'application/json',
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({username: newUsername }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok){
+                setUser((prev) => ({...prev, username: newUsername})); //Displays new username on UI
+
+                toaster.create({
+                    description: 'Username updated!',
+                    type: 'success',
+                    duration: 3000,
+                    closable: true,
+                });
+
+                setNewUsername("");
+            }else{
+                toaster.create({
+                    description: data.error || "Update failed",
+                    type: 'error',
+                    duration: 3000,
+                    closable: true,
+                });
+            }
+        }catch(err){
+            console.error("Username update error: ", err);
+            toaster.create({
+                description: 'Network Error',
+                type: 'error',
+                duration: 3000,
+                closable: true,
+            });
+        }
+    };
     
 
   return (
@@ -157,13 +212,24 @@ const UpdateProfile = () => {
                         <Text color = 'black'>{user?.email}</Text>
                     </VStack>
                 </HStack>
-                <Heading color = 'black'>Update Your Profile</Heading>
+                <Heading 
+                    color = 'black' 
+                    textDecoration = 'underline' 
+                >
+                    Update Your Profile
+                </Heading>
 
                 {/*Profile Picture Upload Section*/}
                 <VStack
                     spacing = '4'
                     align = 'center'
                 >
+                    <Heading 
+                        fontSize = 'md' 
+                        color = 'black'
+                    >
+                        Change your profile picture:
+                    </Heading>
                     {preview && (
                         <Image 
                             src = {preview}
@@ -205,6 +271,36 @@ const UpdateProfile = () => {
                             Upload Profile Picture
                         </Button>
                     )}
+                </VStack>
+                {/*Username Update Section*/}
+                <VStack>
+                    <Heading 
+                        fontSize = 'md' 
+                        color = 'black'
+                    >
+                        Change your username:
+                    </Heading>
+                    <HStack>
+                        <Input 
+                            placeholder='Enter new username' 
+                            color = 'black' 
+                            value = {newUsername}
+                            onChange = {(e) => setNewUsername(e.target.value)}
+                        />
+                        <Button 
+                            bg = {accentYellow}
+                            _hover = {{
+                                shadow: 'sm',
+                                border: `2px solid ${green}`
+                            }}
+                            _active = {{
+                                border: `2px solid ${green}`
+                            }}
+                            onClick = {handleChangeUsername}
+                        >
+                            Submit
+                        </Button>
+                    </HStack>
                 </VStack>
 
 
