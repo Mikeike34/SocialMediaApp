@@ -129,8 +129,8 @@ const Header = ({showProfileInfo = false}) => {
     <Flex
         pos = 'fixed'
         top = '0'
-        left = '0'
-        w = '100%'
+        left = '50'
+        w = {{base: '100%', xl: '72vw'}}
         h = '100px'
         bg = 'white'
         boxShadow = 'sm'

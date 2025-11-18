@@ -53,7 +53,6 @@ const UserProfile = () => {
       bg = {green} 
       p = {{base: 2, md: 4, lg: 6}}
     >
-      <Header showprofileInfo = {true}/>
       <HStack 
         w = '100%' 
         align= 'stretch' 
@@ -74,8 +73,10 @@ const UserProfile = () => {
         <Flex 
           alignItems = 'center'
           minH = '100vh'
-          flex = '1'
+          flex = {{base: '1', xl: '.9'}}
+          ml = {{base: '0', xl: '100px'}}
           mt = {{base: 2, xl: 4}}
+          maxW = {{xl: '75vw'}}
           bg = {backgroundYellow}
           borderRadius = '12px'
           p = {{base: 2, md: 4}}
@@ -97,6 +98,7 @@ const UserProfile = () => {
             align = 'center'
             px = {{base: 2, md: 4}} 
           >
+            <Header showprofileInfo = {true}/>
             <Avatar.Root>
               <Avatar.Image src = { user?.profile_pic}/>
               <Avatar.Fallback name = {user?.username} />

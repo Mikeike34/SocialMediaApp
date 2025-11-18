@@ -88,6 +88,7 @@ const Sidebar = () => {
             boxShadow = '0 4px 12px 0 rgba(0, 0, 0, 0.05)'
             borderRadius={navSize == 'small' ? '15px' : '30px'}
             w = {navSize == 'small' ? '75px' : '200px'}
+            left = {navSize == 'small' ? '70px' : '30px'}
             flexDir = 'column'
             justifyContent = 'space-between'
             divideY={navSize === 'small' ? 'none' : '2px'}
