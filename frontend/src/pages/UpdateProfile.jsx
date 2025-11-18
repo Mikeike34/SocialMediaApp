@@ -188,8 +188,8 @@ const UpdateProfile = () => {
                 p = '8'
                 borderRadius = '30px'
                 shadow = 'md'
-                h = '70%'
-                w = '70%'
+                minH = '60%'
+                minW = '60%'
                 textAlign = 'center'
             >
                 {/*Header*/}
@@ -204,7 +204,7 @@ const UpdateProfile = () => {
                     <VStack>
                         <Heading
                             as = 'h3'
-                            size = {{base: 'sm', md: 'lg'}}
+                            size = {{base: 'sm', md: 'lg', lg: 'xl'}}
                             color = 'black'
                         >
                             {user?.username}
@@ -223,9 +223,11 @@ const UpdateProfile = () => {
                 <VStack
                     spacing = '4'
                     align = 'center'
+                    pb = '40px'
+                    pt = '20px'
                 >
                     <Heading 
-                        fontSize = 'md' 
+                        fontSize = {{base: 'md', md: 'lg', lg: 'lg'}}  
                         color = 'black'
                     >
                         Change your profile picture:
@@ -256,7 +258,7 @@ const UpdateProfile = () => {
 
                     {selectedFile && (
                         <Button
-                            colorScheme = 'green'
+                            bg = {'#AEC8CA'}
                             onClick = {handleUpload}
                             isLoading = {uploading}
                             color = 'black'
@@ -275,14 +277,15 @@ const UpdateProfile = () => {
                 {/*Username Update Section*/}
                 <VStack>
                     <Heading 
-                        fontSize = 'md' 
+                        fontSize = {{base: 'md', md: 'lg', lg: 'lg'}} 
                         color = 'black'
                     >
                         Change your username:
                     </Heading>
                     <HStack>
                         <Input 
-                            placeholder='Enter new username' 
+                            placeholder = 'New Username'
+                            fontSize = {{base: 'xs', md: 'sm', lg: 'md'}}
                             color = 'black' 
                             value = {newUsername}
                             onChange = {(e) => setNewUsername(e.target.value)}
