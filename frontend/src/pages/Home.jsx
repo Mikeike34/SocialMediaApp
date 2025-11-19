@@ -29,7 +29,7 @@ const Home = () => {
                             color = 'black'
                             fontWeight= {{base: 'bold', xl: 'normal'}}
                             fontFamily = 'sans-serif'
-                            pt = '30px'
+                            pt = {{base: '10vh', xl: '0'}}
                             pb = '10px'
                         >
                             Ready
@@ -55,12 +55,28 @@ const Home = () => {
                     borderRadius = '12px'
                     overflow = 'hidden'
                     display = 'flex'
-                    alignItems = 'center'
                     justifyContent = 'center'
                     m = {{base: '30px'}}
-
+                    alignItems={{base: 'center'}}
                 >
-                    <Text color = {accentYellow} fontFamily = 'sans-serif'>Placeholder Text</Text>
+                    <VStack pt = {{base: '10px', md: '50px'}}>
+                    <Heading 
+                    color = {accentYellow} 
+                    fontFamily = 'sans-serif'
+                    size = {{base: 'xl', md: '4xl'}}
+                    textAlign = 'center'
+                    pb={{base: '0px', md: '40px'}}
+                    >
+                        Welcome to my social media platform
+                    </Heading>
+                    <Text color = {accentYellow} fontFamily = 'sans-serif' fontSize = {{base: 'sm', md: 'lg', lg: '2xl', xl: 'lg'}} px = {{base: '10px', md: '50px'}} textAlign = 'center'>
+                        This project was built as part of my personal portfolio to showcase my skills in full-stack web development.
+                        Users can create posts, interact with others, and experience a simplified and modern interface.
+                    </Text>
+                    <Text color = {accentYellow} fontFamily = 'sans-serif' fontSize = {{base: 'md', md: 'lg'}} px = {{base: '10px', md: '50px'}} pb = '10px' textAlign={'center'}>
+                        Enjoy!
+                    </Text>
+                    </VStack>
                 </Box>
                 <Button 
                     bg = 'black'
