@@ -85,17 +85,17 @@ const CreatePost = () => {
         <Flex 
             flex = '1' 
             justify = 'center' 
-            align = 'flex-start' 
-            mt = {5} 
-            mb = {5}
+            align = 'center'
+            mt = {{base: '0'}} 
+            mb = {{base: '100px'}}
         >
             <Box 
                 bg = {backgroundYellow} 
                 p ={8} 
                 borderRadius={'30px'} 
                 shadow = 'md' 
-                h = '70%' 
-                w = '70%' 
+                h = {{base: '50vh', md: '40vh', xl: '50vh'}}
+                w = {{base: '85vw', md: '75vw', lg: '80vw', xl: '50vw'}} 
                 textAlign = 'center'
             >
                 <Text fontSize = '2xl' fontWeight = 'bold' mb = {6} color = {'black'}>
