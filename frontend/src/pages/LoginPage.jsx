@@ -47,13 +47,26 @@ const LoginPage = () => {
 
     
   return (
-    <Flex minH = "100vh" align = "center" justify = "center" bgColor = {green} >
-        <Box bg = {backgroundYellow} p = {8} borderRadius = '12px' shadow = 'lg' w = {{base: 'lg', md: '2xl'}} h = {{md: '33vh', xl: '40vh'}} textAlign= 'center' m = {{base: '20px'}}>
+    <Flex 
+        minH = "100vh" 
+        align = "center" 
+        justify = "center" 
+        bgColor = {green} 
+    >
+        <Box 
+            bg = {backgroundYellow} 
+            p = {8} borderRadius = '12px' 
+            shadow = 'lg' 
+            w = {{base: 'lg', md: '2xl'}} 
+            h = {{base: '45%', md: '40%', xl: '50%'}} 
+            textAlign= 'center' 
+            m = {{base: '20px'}}
+        >
             <Heading
                 fontFamily = "'Gravitas One, serif'"
                 color = {purple}
                 fontSize = '10vh'
-                py = {{md: '25px', xl: '15px'}}
+                py = {{base: '20px', md: '30px', lg: '40px', xl: '20px'}}
             >
                 Login
             </Heading>
