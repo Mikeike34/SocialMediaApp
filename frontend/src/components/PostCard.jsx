@@ -204,7 +204,7 @@ const PostCard = ({ post }) => {
   return (
     <Card.Root 
         minh = '20vh' 
-        w = '90%' 
+        w = {{base: '75vw', md: '60vw', xl: '40vw'}} 
         justify = 'center' 
         bgColor = {accentYellow} 
         border = 'transparent' 

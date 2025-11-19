@@ -62,7 +62,7 @@ const UserProfile = () => {
 
         {/*Navigation */}
         <Box
-          w = {{md: '100px', lg: '150px'}}
+          w = {{md: '100px', lg: '105px'}}
           display = 'flex'
           justifyContent = 'center'
         >
@@ -115,6 +115,7 @@ const UserProfile = () => {
           <Flex 
             justify = 'center'
             px = {{base: 2, md: 4}}
+            py = '4'
           >
             <ProfileFeed userID = {userID} token = {token} />
           </Flex>

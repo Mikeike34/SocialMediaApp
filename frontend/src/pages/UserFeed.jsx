@@ -32,7 +32,7 @@ const UserFeed = () => {
 
           {/*Navigation*/}
           <Box
-            w = {{md: '100px', lg: '150px'}}
+            w = {{md: '100px', lg: '105px'}}
             display = 'flex'
             justifyContent = 'center'
           >
@@ -81,6 +81,7 @@ const UserFeed = () => {
             <Flex 
               justify = 'center'
               px = {{base: 2, md: 4}}
+              py = '4'
             >
               <MainFeed userID = {userID} token = {token} />
             </Flex>

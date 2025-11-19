@@ -130,8 +130,8 @@ const Header = ({showProfileInfo = false}) => {
         pos = 'fixed'
         top = '0'
         left = '50'
-        w = {{base: '100%', xl: '72vw'}}
-        h = '100px'
+        w = {{base: '100%', xl: '76vw'}}
+        h = '110px'
         bg = 'white'
         boxShadow = 'sm'
         justifyContent = 'space-between'
