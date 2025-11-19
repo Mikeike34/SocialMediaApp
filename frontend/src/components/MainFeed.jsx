@@ -37,14 +37,14 @@ const MainFeed = ({userID, token}) => {
 
     if(loading) return <Spinner size = 'xl' />;
 
-    if(posts.length === 0) return <Text color = 'gray.600'>No posts to see here...</Text>;
+    if(posts.length === 0) return <Text color = 'gray.600' pt = '33vh'>No posts to see here...</Text>;
   return (
     <Flex flexDir = 'column' align = 'center' p ={5}>
         <VStack spacing = {4} w = '100%'>
             {!loading ? (
                 posts.map((post) => <PostCard key = {post._id} post = {post} />)
             ) : (
-                <Text>Loading Posts...</Text>
+                <Text pt = '33vh'>Loading Posts...</Text>
             )}
         </VStack>
     </Flex>
