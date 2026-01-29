@@ -131,6 +131,36 @@ New updates in this repository may happen as I am always tinkering.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+<!-- Examples -->
+## Home
+<img width="1900" height="938" alt="Home Page" src="https://github.com/user-attachments/assets/a3601239-3775-419c-bfee-64e56145b78b" />
+
+
+## Login and Register Pages
+
+<img width="1915" height="942" alt="Login" src="https://github.com/user-attachments/assets/c108c004-a592-427a-9c37-30239b45f830" />
+<img width="1914" height="938" alt="Register" src="https://github.com/user-attachments/assets/5125e451-cc20-43d1-88ca-4fa5b03b10d7" />
+
+## Features
+### Live Search
+![Live Search](https://github.com/user-attachments/assets/8aad7d0c-9ecb-4be2-a859-8d10d8f0e487)
+
+### Commenting
+![Comment](https://github.com/user-attachments/assets/9af6886b-0f61-43f0-91c4-4e5befbb343d)
+
+### Creating Posts
+![Creating a post](https://github.com/user-attachments/assets/65f02da7-fe61-4604-a839-f5c8f84e258b)
+
+## Mobile Layout
+<img width="345" height="497" alt="Mobile Layout" src="https://github.com/user-attachments/assets/060c22e3-e102-4131-84eb-43972913eb0e" />
+
+
+
+
+
+
+
+
 
 <!-- ROADMAP -->
 ## Roadmap
@@ -141,7 +171,7 @@ New updates in this repository may happen as I am always tinkering.
 - [X] create feed page
 - [X] Like/Unlike functiuonality
 - [X] display comments
-- [ ] Incorporate a search function
+- [X] Incorporate a search function
 - [ ] Include edit post function
 - [ ] Add a place for user notes
 
