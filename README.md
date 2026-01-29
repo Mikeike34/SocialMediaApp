@@ -65,7 +65,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Social media is a part of most people's lives. I am interested in how basic socail media systems work and decided to make this project as a way to learn. It has been exciting, fun, and has shown me a lot.
+Social media is a part of most people's lives. I am interested in how basic social media systems work, so I decided to make this project as a way to learn. It has been exciting, fun, and has shown me a lot.
 
 New updates in this repository may happen as I am always tinkering. 
 
@@ -126,7 +126,9 @@ New updates in this repository may happen as I am always tinkering.
 * Create a user
 * Log in to see posts from users you follow or your own posts
 * Create new posts
-* Like and comment on posts
+* Search for users
+* Follow users
+* Like and comment on posts from other users
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
